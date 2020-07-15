@@ -1,6 +1,8 @@
 const express = require('express');
 const exphbs = require('express-handlebars')
 const path = require('path')
+const morgan = require('morgan')
+const methodOverride = require('method-override')
 //initializations
 const app = express();
 
@@ -17,17 +19,17 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs');
 
 // middlewares
+app.use(morgan('dev'))
 app.use(express.urlencoded({extended: false}));
+app.use(methodOverride('_method')) //to handle delete in a form
 
 //global variables
 
 
 
 // routes
-app.get('/', (req, res) => {
-    res.render('index')
-})
-
+app.use(require('./routes/index.routes'))
+app.use(require('./routes/notes.routes'))
 // static files
 app.use(express.static(path.join(__dirname, 'public')))
 
