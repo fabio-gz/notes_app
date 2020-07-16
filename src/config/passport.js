@@ -1,16 +1,15 @@
 const passport = require('passport')
-const { MongooseDocument } = require('mongoose')
+
 const localStrategy = require('passport-local').Strategy
 
 const User = require('../models/user')
 
 passport.use(new localStrategy({
     usernameField: 'email',
-    passwordField: 'password'
 }, async (email, password, done) => {
 
     //match user's email
-    const user = await User.findOne({email})
+    const user = await User.findOne({email: email})
     if (!user){
         return done(null, false, {message: 'Not user found'})
     } else {
